@@ -119,7 +119,7 @@ const options = {
     clean: true,
 };
 
-const client = mqtt.connect('ws://broker.hivemq.com:8000/mqtt', options);
+const client = mqtt.connect('wss://broker.hivemq.com:8000/mqtt', options);
 
 client.on('connect', () => {
     console.log('Connected to MQTT broker');
@@ -142,7 +142,7 @@ client.on('message', (topic, message) => {
     console.log('Received message:', topic, message.toString());
 
     switch (topic) {
-        case "gandasoli/dehydrator/temperature":
+        case "git ":
             currentTemperature.textContent = message.toString()
             addData(chartTemperature, new Date().toLocaleTimeString(), message.toString())
             break
