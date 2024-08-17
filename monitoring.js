@@ -91,6 +91,9 @@ function addData(chart, label, value) {
 
     chart.data.datasets.forEach((dataset) => {
         dataset.data.push(value);
+        if (dataset.data.length > 60) {
+            dataset.data.shift()
+        }
         // if (dataset.label === 'Temperature') {
         //     dataset.data.push(temperature);
         //     if (dataset.data.length > 60) {
@@ -142,7 +145,7 @@ client.on('message', (topic, message) => {
     console.log('Received message:', topic, message.toString());
 
     switch (topic) {
-        case "git ":
+        case "gandasoli/dehydrator/temperature ":
             currentTemperature.textContent = message.toString()
             addData(chartTemperature, new Date().toLocaleTimeString(), message.toString())
             break
