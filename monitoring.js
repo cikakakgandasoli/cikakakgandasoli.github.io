@@ -119,7 +119,7 @@ const options = {
     clean: true,
 };
 
-const client = mqtt.connect('wss://broker.hivemq.com:8000/mqtt', options);
+const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt', options);
 
 client.on('connect', () => {
     console.log('Connected to MQTT broker');
