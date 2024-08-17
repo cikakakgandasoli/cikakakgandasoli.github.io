@@ -143,9 +143,8 @@ client.on('connect', () => {
 
 client.on('message', (topic, message) => {
     console.log('Received message:', topic, message.toString());
-
     switch (topic) {
-        case "gandasoli/dehydrator/temperature ":
+        case "gandasoli/dehydrator/temperature":
             currentTemperature.textContent = message.toString()
             addData(chartTemperature, new Date().toLocaleTimeString(), message.toString())
             break
