@@ -13,7 +13,12 @@
 <div class="container mt-5">
     <h1>Dehydrator Monitoring System</h1>
     <div class="alert alert-info" id="mqtt-status">Connecting to MQTT...</div>
-
+    <div class="alert alert-danger d-none" id="temperatureAlert" role="alert">
+        Temperature exceeds the maximum capacity!
+    </div>
+    <div class="alert alert-warning d-none" id="temperatureWarning" role="alert">
+        Temperature is below the minimum capacity!
+    </div>
     <table class="table">
         <tr>
             <td class="h1"><span id="currentTemperature"></span> °C</td>

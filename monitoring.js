@@ -8,6 +8,11 @@ let temperatureDataSets = [
         label: 'Temperature',
         backgroundColor: 'rgb(17,76,122)',
         borderColor: 'rgb(17,76,122)',
+    },
+    {
+        label: 'Temperature Air In',
+        backgroundColor: 'rgb(92,185,77)',
+        borderColor: 'rgb(92,185,77)',
     }
 ]
 
@@ -82,7 +87,7 @@ function initChart(canvas, datasets) {
     return new Chart(canvas, config);
 }
 
-function addData(chart, label, value) {
+function addData(chart, label, value, typeLine) {
     chart.data.labels.push(label);
 
     if (chart.data.labels.length > 60) {
@@ -90,10 +95,21 @@ function addData(chart, label, value) {
     }
 
     chart.data.datasets.forEach((dataset) => {
-        dataset.data.push(value);
-        if (dataset.data.length > 60) {
-            dataset.data.shift()
+        if (!typeLine) {
+            dataset.data.push(value);
+            if (dataset.data.length > 60) {
+                dataset.data.shift()
+            }
+        } else {
+            if(dataset.label === typeLine) {
+                dataset.data.push(value);
+                if (dataset.data.length > 60) {
+                    dataset.data.shift()
+                }
+            }
         }
+
+
         // if (dataset.label === 'Temperature') {
         //     dataset.data.push(temperature);
         //     if (dataset.data.length > 60) {
@@ -134,6 +150,11 @@ client.on('connect', () => {
             console.log('Subscribed to gandasoli/dehydrator/temperature');
         }
     });
+    client.subscribe('gandasoli/dehydrator/temperature/airin', { qos: 0 }, (error) => {
+        if (!error) {
+            console.log('Subscribed to gandasoli/dehydrator/temperature');
+        }
+    });
     client.subscribe('gandasoli/dehydrator/humidity', { qos: 0 }, (error) => {
         if (!error) {
             console.log('Subscribed to gandasoli/dehydrator/humidity');
@@ -156,7 +177,25 @@ client.on('message', (topic, message) => {
     switch (topic) {
         case "gandasoli/dehydrator/temperature":
             currentTemperature.textContent = message.toString()
-            addData(chartTemperature, new Date().toLocaleTimeString(), message.toString())
+            addData(chartTemperature, new Date().toLocaleTimeString(), message.toString(), "Temperature")
+
+            const minTemp = parseFloat($('#minimumTemperature').val());
+            const maxTemp = parseFloat($('#maximumTemperature').val());
+
+            if (message > maxTemp) {
+                $('#temperatureAlert').removeClass('d-none');
+                $('#temperatureWarning').addClass('d-none');
+            } else if (message < minTemp) {
+                $('#temperatureWarning').removeClass('d-none');
+                $('#temperatureAlert').addClass('d-none');
+            } else {
+                $('#temperatureAlert').addClass('d-none');
+                $('#temperatureWarning').addClass('d-none');
+            }
+
+            break
+        case "gandasoli/dehydrator/temperature/airin":
+            addData(chartTemperature, new Date().toLocaleTimeString(), message.toString(), "Temperature Air In")
             break
         case "gandasoli/dehydrator/humidity":
             currentHumidity.textContent = message.toString()
