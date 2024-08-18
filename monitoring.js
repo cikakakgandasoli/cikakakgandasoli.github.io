@@ -139,6 +139,16 @@ client.on('connect', () => {
             console.log('Subscribed to gandasoli/dehydrator/humidity');
         }
     });
+    client.subscribe('gandasoli/dehydrator/valueControl', { qos: 0 }, (error) => {
+        if (!error) {
+            console.log('Subscribed to gandasoli/dehydrator/valueControl');
+        }
+    });
+    client.subscribe('gandasoli/dehydrator/setControl', { qos: 0 }, (error) => {
+        if (!error) {
+            console.log('Subscribed to gandasoli/dehydrator/setControl');
+        }
+    });
 });
 
 client.on('message', (topic, message) => {
@@ -152,8 +162,11 @@ client.on('message', (topic, message) => {
             currentHumidity.textContent = message.toString()
             addData(chartHumidity, new Date().toLocaleTimeString(), message.toString())
             break
-        case "gandasoli/dehydrator/getControl":
-
+        case "gandasoli/dehydrator/valueControl":
+            let min = message.toString().split(',')[0]
+            let max = message.toString().split(',')[1]
+            $('#minimumTemperature').val(min)
+            $('#maximumTemperature').val(max)
             break
         case "gandasoli/dehydrator/setControl":
 
@@ -161,6 +174,14 @@ client.on('message', (topic, message) => {
     }
 
 });
+
+publishMessage("gandasoli/dehydrator/getControl", "")
+
+$(document).on('click', '#btnChangeControl', function (e) {
+    e.preventDefault()
+    publishMessage("gandasoli/dehydrator/setControl", $('#minimumTemperature').val() + "," + $('#maximumTemperature').val())
+})
+
 
 client.on('error', (error) => {
     console.log('Connection error:', error);
@@ -176,6 +197,16 @@ client.on('offline', () => {
     console.log('Client is offline');
     $('#mqtt-status').text('MQTT client offline');
 });
+
+function publishMessage(topic, message) {
+    client.publish(topic, message, { qos: 0, retain: false }, (error) => {
+        if (error) {
+            console.log('Publish error:', error);
+        } else {
+            console.log(`Message published to ${topic}: ${message}`);
+        }
+    });
+}
 
 // Google Weather API setup
 // setup
