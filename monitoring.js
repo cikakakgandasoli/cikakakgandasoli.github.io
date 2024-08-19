@@ -21,6 +21,11 @@ let humidityDataSets = [
         label: 'Humidity',
         backgroundColor: 'rgb(17,76,122)',
         borderColor: 'rgb(17,76,122)',
+    },
+    {
+        label: 'Humidity Air In',
+        backgroundColor: 'rgb(92,185,77)',
+        borderColor: 'rgb(92,185,77)',
     }
 ]
 
@@ -155,6 +160,11 @@ client.on('connect', () => {
             console.log('Subscribed to gandasoli/dehydrator/temperature');
         }
     });
+    client.subscribe('gandasoli/dehydrator/humidity/airin', { qos: 0 }, (error) => {
+        if (!error) {
+            console.log('Subscribed to gandasoli/dehydrator/temperature');
+        }
+    });
     client.subscribe('gandasoli/dehydrator/humidity', { qos: 0 }, (error) => {
         if (!error) {
             console.log('Subscribed to gandasoli/dehydrator/humidity');
@@ -195,11 +205,16 @@ client.on('message', (topic, message) => {
 
             break
         case "gandasoli/dehydrator/temperature/airin":
+            $("#temperatureAmbience").text(message.toString())
             addData(chartTemperature, new Date().toLocaleTimeString(), message.toString(), "Temperature Air In")
+            break
+        case "gandasoli/dehydrator/humidity/airin":
+            $("#humidityAmbience").text(message.toString())
+            addData(chartHumidity, new Date().toLocaleTimeString(), message.toString(), "Humidity Air In")
             break
         case "gandasoli/dehydrator/humidity":
             currentHumidity.textContent = message.toString()
-            addData(chartHumidity, new Date().toLocaleTimeString(), message.toString())
+            addData(chartHumidity, new Date().toLocaleTimeString(), message.toString(), "Humidity")
             break
         case "gandasoli/dehydrator/valueControl":
             let min = message.toString().split(',')[0]
