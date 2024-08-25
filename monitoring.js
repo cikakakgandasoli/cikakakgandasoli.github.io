@@ -175,9 +175,35 @@ client.on('connect', () => {
             console.log('Subscribed to gandasoli/dehydrator/valueControl');
         }
     });
+    client.subscribe('gandasoli/dehydrator/valueTemperatureAchieved', { qos: 0 }, (error) => {
+        if (!error) {
+            console.log('Subscribed to gandasoli/dehydrator/valueTemperatureAchieved');
+        }
+    });
+    client.subscribe('gandasoli/dehydrator/valueHumidityAchieved', { qos: 0 }, (error) => {
+        if (!error) {
+            console.log('Subscribed to gandasoli/dehydrator/valueHumidityAchieved');
+        }
+    });
     client.subscribe('gandasoli/dehydrator/setControl', { qos: 0 }, (error) => {
         if (!error) {
             console.log('Subscribed to gandasoli/dehydrator/setControl');
+        }
+    });
+
+    client.subscribe('gandasoli/dehydrator/evaporation/open_air', { qos: 0 }, (error) => {
+        if (!error) {
+            console.log('Subscribed to gandasoli/dehydrator/evaporation/open_air');
+        }
+    });
+    client.subscribe('gandasoli/dehydrator/evaporation/solar_dryer', { qos: 0 }, (error) => {
+        if (!error) {
+            console.log('Subscribed to gandasoli/dehydrator/evaporation/solar_dryer');
+        }
+    });
+    client.subscribe('gandasoli/dehydrator/evaporation/percentage', { qos: 0 }, (error) => {
+        if (!error) {
+            console.log('Subscribed to gandasoli/dehydrator/evaporation/percentage');
         }
     });
 });
@@ -222,6 +248,27 @@ client.on('message', (topic, message) => {
             $('#minimumTemperature').val(min)
             $('#maximumTemperature').val(max)
             break
+        case "gandasoli/dehydrator/valueTemperatureAchieved":
+            let minHT = message.toString().split(',')[0]
+            let maxHT = message.toString().split(',')[1]
+            $('#minTemperatureRecorded').text(minHT)
+            $('#maxTemperatureRecorded').text(maxHT)
+            break
+        case "gandasoli/dehydrator/valueHumidityAchieved":
+            let minHA = message.toString().split(',')[0]
+            let maxHA = message.toString().split(',')[1]
+            $('#minHumidityRecorded').text(minHA)
+            $('#maxHumidityRecorded').text(maxHA)
+            break
+        case 'gandasoli/dehydrator/evaporation/open_air':
+            $('#evaporation_open_air').text(message.toString())
+            break
+        case 'gandasoli/dehydrator/evaporation/solar_dryer':
+            $('#evaporation_solar_dryer').text(message.toString())
+            break
+        case 'gandasoli/dehydrator/evaporation/percentage':
+            $('#evaporation_percentage').text(message.toString())
+            break
         case "gandasoli/dehydrator/setControl":
 
             break
@@ -230,6 +277,8 @@ client.on('message', (topic, message) => {
 });
 
 publishMessage("gandasoli/dehydrator/getControl", "")
+publishMessage("gandasoli/dehydrator/getHumidityAchieved", "")
+publishMessage("gandasoli/dehydrator/getTemperatureAchieved", "")
 
 $(document).on('click', '#btnChangeControl', function (e) {
     e.preventDefault()

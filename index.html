@@ -10,6 +10,7 @@
 </head>
 <body>
 
+
 <div class="container mt-5">
     <h1>Dehydrator Monitoring System</h1>
     <div class="alert alert-info" id="mqtt-status">Connecting to MQTT...</div>
@@ -21,13 +22,29 @@
     </div>
     <table class="table">
         <tr>
-            <td class="h3">Temperature Chamber <span id="currentTemperature"></span> °C</td>
-            <td class="h3">Humidity Chamber <span id="currentHumidity"></span> %</td>
+            <td class="h6">Temperature Chamber <span id="currentTemperature"></span> °C</td>
+            <td class="h6">Humidity Chamber <span id="currentHumidity"></span> %</td>
         </tr>
         <tr>
-            <td class="h3">Temperature Ambience <span id="temperatureAmbience"></span> °C</td>
-            <td class="h3">Humidity Ambience <span id="humidityAmbience"></span> %</td>
+            <td class="h6">Temperature Ambience <span id="temperatureAmbience"></span> °C</td>
+            <td class="h6">Humidity Ambience <span id="humidityAmbience"></span> %</td>
         </tr>
+        <tr>
+            <td class="h6">Min Temperature Recorded <span id="minTemperatureRecorded"></span> °C</td>
+            <td class="h6">Max Temperature Recorded <span id="maxTemperatureRecorded"></span> °C</td>
+        </tr>
+        <tr>
+            <td class="h6">Min Humidity Recorded <span id="minHumidityRecorded"></span> %</td>
+            <td class="h6">Max Humidity Recorded <span id="maxHumidityRecorded"></span> %</td>
+        </tr>
+        <tr>
+            <td class="h6">Evaporation Rate Open Air <span id="evaporation_open_air"></span> g/m²/s</td>
+            <td class="h6">Evaporation Rate Solar Dryer <span id="evaporation_solar_dryer"></span> g/m²/s</td>
+        </tr>
+        <tr>
+            <td class="h6">Evaporation Rate Percentage <span id="evaporation_percentage"></span> %</td>
+        </tr>
+
     </table>
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
